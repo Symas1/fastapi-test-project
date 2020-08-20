@@ -1,0 +1,20 @@
+version: "3.7"
+services:
+    star:
+        image: postgres:12.4-alpine
+        volumes:
+            - star-volume:/var/lib/postgresql/data
+        ports:
+            - 5432:5432
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: star
+
+    adminer-star:
+        image: adminer
+        ports:
+          - 8081:8080
+
+volumes:
+    star-volume:
