@@ -1,5 +1,9 @@
-import asyncio
+import sys
 from pathlib import Path
+
+sys.path.append(str(Path.cwd()))
+import asyncio
+from itertools import chain
 from random import randint
 from random import sample
 from uuid import uuid4
@@ -36,13 +40,16 @@ async def run(conf_path):
     ])
 
     clients = [Client(access_token=token) for token in tokens]
-    post_ids = []
+
+    post_tasks = []
     for client in clients:
-        new_post_ids = await asyncio.gather(*[
+        post_tasks.append(asyncio.gather(*[
             client.create_post(post=PostCreateModel())
             for _ in range(randint(0, max_posts_per_user))
-        ])
-        post_ids.extend([new_post_id['id'] for new_post_id in new_post_ids])
+        ]))
+    else:
+        post_task_results = await asyncio.gather(*post_tasks)
+        post_ids = [post['id'] for post in chain(*post_task_results)]
 
     like_tasks = []
     for client, user_id in zip(clients, user_ids):
@@ -56,6 +63,8 @@ async def run(conf_path):
         )
     else:
         await asyncio.gather(*like_tasks)
+
+    await Client.session.close()
 
 
 if __name__ == '__main__':
