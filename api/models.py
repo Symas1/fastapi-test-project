@@ -42,8 +42,3 @@ class UserActivityModel(BaseModel):
 
 class PostCreateModel(BaseModel):
     ...
-
-
-# class LikeCreateDeleteModel(BaseModel):
-#     post_id: int
-#     user_id: Optional[int] = None
