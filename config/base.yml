@@ -1,0 +1,15 @@
+database:
+  database: star
+  user: postgres
+  password: postgres
+  host: localhost
+  port: 5432
+
+jwt:
+  # openssl rand -hex 32
+  secret_key: bf898fb22e21fdeed704e7ed37c3da1a440aed92ec840764e1a0b0edafc4afb9
+  algorithm: HS256
+  access_token_expire_minutes: 15
+
+client:
+  url: http://localhost:8000
